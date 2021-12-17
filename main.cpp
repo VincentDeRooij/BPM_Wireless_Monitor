@@ -30,6 +30,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <stdio.h>
+#include "heartRate.h"
 
 MAX30102 particleSensor;
 struct timeval __millis_start;
@@ -81,7 +82,7 @@ void loop()
 
   long irValue = particleSensor.getIR();
 
-  if(irValue > 100000)
+  if(checkForBeat(irValue) == true)
   {
     //We sensed a beat!
     long delta = millis() - lastBeat;
