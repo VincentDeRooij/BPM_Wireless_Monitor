@@ -8,7 +8,7 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp)
 # include all the include files of the WiringPi library 
 file(GLOB_RECURSE WIREPI_INCLUDES CONFIGURE_DEPENDS /usr/local/include/*.h)
 
-add_executable(main_program test.cpp ${SRC_FILES})
+add_executable(main_program main.cpp ${SRC_FILES})
 
 # link the wiringPi library
 target_link_libraries(main_program ${catkin_LIBRARIES} -lwiringPi)
