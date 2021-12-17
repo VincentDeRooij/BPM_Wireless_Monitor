@@ -26,22 +26,41 @@
 */
 
 #include <iostream>
-#include <stdint.h>
 #include "MAX30102.h" // uses i2c-dev, instead of Wire.h 
 #include <sys/time.h>
+#include <unistd.h>
+#include <stdio.h>
 
-MAX30105 particleSensor;
+MAX30102 particleSensor;
+struct timeval __millis_start;
 
-const byte RATE_SIZE = 4; //Increase this for more averaging. 4 is good.
+const uint8_t RATE_SIZE = 4; //Increase this for more averaging. 4 is good.
 uint8_t rates[RATE_SIZE]; //Array of heart rates
 uint8_t rateSpot = 0;
 long lastBeat = 0; //Time at which the last beat occurred
 
-float beatsPerMinute;
+int beatsPerMinute;
 int beatAvg;
+
+void init_millis() {
+    gettimeofday(&__millis_start, NULL);
+};
+
+unsigned long int millis() {
+    long mtime, seconds, useconds; 
+    struct timeval end;
+    gettimeofday(&end, NULL);
+    seconds  = end.tv_sec  - __millis_start.tv_sec;
+    useconds = end.tv_usec - __millis_start.tv_usec;
+
+    mtime = ((seconds) * 1000 + useconds/1000.0) + 0.5;
+    return mtime;
+};
 
 void setup()
 {
+  // inits the counter
+  init_millis();
   // Initialize sensor
   if (!particleSensor.begin()) //Use default I2C port, 400kHz speed
   {
@@ -52,7 +71,6 @@ void setup()
 
   particleSensor.setup(); //Configure sensor with default settings
   particleSensor.setPulseAmplitudeRed(0x0A); //Turn Red LED to low to indicate sensor is running
-  //particleSensor.setPulseAmplitudeGreen(0); //Turn off Green LED
 }
 
 void loop()
@@ -63,19 +81,15 @@ void loop()
 
   long irValue = particleSensor.getIR();
 
-  struct timeval time_now{};
-  gettimeofday(&time_now, nullptr);
-  time_t millisecs = (time_now.tv_sec * 1000) + (time_now.tv_usec / 1000);
-
-  if (checkForBeat(irValue) == true)
+  if(irValue > 100000)
   {
     //We sensed a beat!
-    long delta = millisecs - lastBeat;
-    gettimeofday(&time_now, nullptr);
-    millisecs = (time_now.tv_sec * 1000) + (time_now.tv_usec / 1000);
-    lastBeat = millisecs;
+    long delta = millis() - lastBeat;
+    lastBeat = millis();
 
-    beatsPerMinute = 60 / (delta / 1000.0);
+    std::cout << "DELTA: " << delta << std::endl;
+
+    beatsPerMinute = 60 / (delta / 1000);
 
     if (beatsPerMinute < 255 && beatsPerMinute > 20)
     {
@@ -96,12 +110,19 @@ void loop()
   std::cout << beatsPerMinute;
   std::cout << ", Avg BPM=";
   std::cout << beatAvg;
+  std::cout << ", Last Millis()=";
+  std::cout << lastBeat;
 
   if (irValue < 50000)
     std::cout << " No finger?";
 
-  std::cout << std::endl; 
+  std::cout << std::endl;
   }
 }
 
 
+int main()
+{
+  setup();
+  loop();
+}

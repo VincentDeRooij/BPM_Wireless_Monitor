@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include "MAX30102.h"
 #include <sys/time.h>
-#include <stdio.h>
 
 using namespace std;
 
