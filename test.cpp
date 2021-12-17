@@ -1,6 +1,9 @@
 #include <iostream>
 #include <unistd.h>
+#include <stdio.h>
 #include "MAX30102.h"
+#include <sys/time.h>
+#include <stdio.h>
 
 using namespace std;
 
@@ -8,32 +11,33 @@ MAX30102 heartSensor;
 
 // Library from https://github.com/garrettluu/max30102-rpi
 
-int main(void)
-{
-	cout << "MAX30102 Heart Sensor Tester" << endl
-		 << "-----------------------------------------" << endl;
-	// Start i2c
-	int result = heartSensor.begin();
-	if (result < 0)
-	{
-		cout << "Failed to start I2C (Error: " << result << ")." << endl;
-		return (-1 * result);
-	}
-	cout << "Device found (revision: " << result << ")!" << endl;
+struct timeval __millis_start;
 
-	heartSensor.setup();
-	//heartSensor.softReset();
-	heartSensor.setPulseAmplitudeRed(0x0A);
+void init_millis() {
+    gettimeofday(&__millis_start, NULL);
+};
+
+unsigned long int millis() {
+    long mtime, seconds, useconds; 
+    struct timeval end;
+    gettimeofday(&end, NULL);
+    seconds  = end.tv_sec  - __millis_start.tv_sec;
+    useconds = end.tv_usec - __millis_start.tv_usec;
+
+    mtime = ((seconds) * 1000 + useconds/1000.0) + 0.5;
+    return mtime;
+};
+
+long lastBeat = 0;
+
+
+int main(void)
+{	
+	init_millis();
 	while (1)
 	{
-		//cout << "Temperature: " << heartSensor.readTemperatureF() << endl;
-		cout << "IR: " << heartSensor.getIR();
-		cout << ", RED: " << heartSensor.getRed();
-		cout << endl;
-		usleep(500);
-		//break;
+		long delta = millis() - lastBeat;
+		
+    	printf("Elapsed time: %ld milliseconds\n", millis());		
 	}
-	//heartSensor.shutDown();
-
-	return 0;
 }
