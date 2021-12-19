@@ -7,6 +7,8 @@
 #include <time.h>
 #include <sys/time.h>
 
+#include "ili9225.h"
+
 #define JAPANESE 0
 #define _DEBUG_ 0
 
@@ -141,49 +143,6 @@ time_t ArrowTest(FontxFile *fx, int width, int height)
     stlen = strlen((char *)ascii);
     xpos = (width - 1) - (fontWidth * stlen);
     lcdDrawUTF8String(fx, xpos, ypos, ascii, color);
-
-    gettimeofday(&endTime, NULL);
-    time_t diff = elapsedTime(startTime, endTime);
-    printf("%s elapsed time[ms]=%ld\n", __func__, diff);
-    return diff;
-}
-
-time_t DirectionTest(FontxFile *fx, int width, int height)
-{
-    struct timeval startTime, endTime;
-    gettimeofday(&startTime, NULL);
-
-    // get font width & height
-    uint8_t buffer[FontxGlyphBufSize];
-    uint8_t fontWidth;
-    uint8_t fontHeight;
-    GetFontx(fx, 0, buffer, &fontWidth, &fontHeight);
-    if (_DEBUG_)
-        printf("fontWidth=%d fontHeight=%d\n", fontWidth, fontHeight);
-
-    uint16_t color;
-    lcdFillScreen(BLACK);
-    uint8_t ascii[20];
-
-    color = RED;
-    strcpy((char *)ascii, "Direction=0");
-    lcdSetFontDirection(DIRECTION0);
-    lcdDrawUTF8String(fx, 0, height - fontHeight - 1, ascii, color);
-
-    color = BLUE;
-    strcpy((char *)ascii, "Direction=180");
-    lcdSetFontDirection(DIRECTION180);
-    lcdDrawUTF8String(fx, width - 1, fontHeight - 1, ascii, color);
-
-    color = CYAN;
-    strcpy((char *)ascii, "Direction=90");
-    lcdSetFontDirection(DIRECTION90);
-    lcdDrawUTF8String(fx, width - fontHeight - 1, height - 1, ascii, color);
-
-    color = GREEN;
-    strcpy((char *)ascii, "Direction=270");
-    lcdSetFontDirection(DIRECTION270);
-    lcdDrawUTF8String(fx, fontHeight - 1, 0, ascii, color);
 
     gettimeofday(&endTime, NULL);
     time_t diff = elapsedTime(startTime, endTime);

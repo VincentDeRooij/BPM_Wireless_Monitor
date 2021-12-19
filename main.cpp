@@ -45,12 +45,14 @@
 #include "ili9225.h"
 
 // TFT DISPLAY
-#define TFT_SCREEN_WIDTH 220
-#define TFT_SCREEN_HEIGHT 178
+#define TFT_SCREEN_HEIGHT 220
+#define TFT_SCREEN_WIDTH 176
 #define OFFSET_X 0
 #define OFFSET_Y 0
 
 // Font
+#define FONT_SIZE 32
+#define FONT_BUFFER_SIZE (FONT_SIZE * FONT_SIZE / 8)
 #define PATH_SIZE_MAX 255 // path size of 255 bytes
 #define FOLDER_NAME "/FontGraphics/"
 #define FONT_NAME_X_AXIS "ILGH32XB.FNT"
@@ -139,6 +141,24 @@ void ColorTest(int width, int height)
   }
 }
 
+void TextTest(FontxFile *fx, char *txt, int width, int height)
+{
+  // get font width & height
+  uint8_t buffer[FontxGlyphBufSize];
+  uint8_t fontWidth;
+  uint8_t fontHeight;
+  GetFontx(fx, 0, buffer, &fontWidth, &fontHeight);
+
+  uint16_t color;
+  lcdFillScreen(BLACK);
+  uint8_t ascii[20];
+
+  color = RED;
+  strcpy((char *)ascii, txt);
+  lcdSetFontDirection(DIRECTION0);
+  lcdDrawUTF8String(fx, 0, height - fontHeight - 1, ascii, color);
+}
+
 void loop()
 {
   ColorTest(TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
@@ -171,6 +191,7 @@ void loop()
         beatAvg /= RATE_SIZE;
       }
     }
+    TextTest(font, "HELLO IAM HERE!", TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
 
     std::cout << "IR=";
     std::cout << irValue;
