@@ -38,7 +38,7 @@ struct timeval __millis_start;
 const uint8_t RATE_SIZE = 4; //Increase this for more averaging. 4 is good.
 uint8_t rates[RATE_SIZE]; //Array of heart rates
 uint8_t rateSpot = 0;
-long lastBeat = 0; //Time at which the last beat occurred
+float lastBeat = 0; //Time at which the last beat occurred
 
 int beatsPerMinute;
 int beatAvg;
@@ -78,8 +78,6 @@ void loop()
 {
   while (1)
   {
-   
-
   long irValue = particleSensor.getIR();
 
   if(checkForBeat(irValue) == true)
@@ -88,9 +86,12 @@ void loop()
     long delta = millis() - lastBeat;
     lastBeat = millis();
 
-    std::cout << "DELTA: " << delta << std::endl;
+//    std::cout << "DELTA: " << delta << std::endl;
 
-    beatsPerMinute = 60 / (delta / 1000);
+    //failSaveBPM = 60 (delta / 1000.0);
+
+    beatsPerMinute = 60 / (delta / 1000.0);
+    
 
     if (beatsPerMinute < 255 && beatsPerMinute > 20)
     {
@@ -111,8 +112,8 @@ void loop()
   std::cout << beatsPerMinute;
   std::cout << ", Avg BPM=";
   std::cout << beatAvg;
-  std::cout << ", Last Millis()=";
-  std::cout << lastBeat;
+  //std::cout << ", Last Millis()=";
+  //std::cout << lastBeat;
 
   if (irValue < 50000)
     std::cout << " No finger?";
