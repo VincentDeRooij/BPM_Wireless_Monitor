@@ -161,7 +161,8 @@ void TextTest(FontxFile *fx, char *txt, int width, int height)
 
 void loop()
 {
-  ColorTest(TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
+  //ColorTest(TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
+  TextTest(font, "HELLO IAM HERE!", TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
 
   while (1)
   {
@@ -191,7 +192,6 @@ void loop()
         beatAvg /= RATE_SIZE;
       }
     }
-    TextTest(font, "HELLO IAM HERE!", TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
 
     std::cout << "IR=";
     std::cout << irValue;
