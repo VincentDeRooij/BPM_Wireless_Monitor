@@ -13,7 +13,7 @@ file(GLOB_RECURSE TFTDisplay_SRC_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_
 # include all the include files of the TFTDisplay library
 #file(GLOB_RECURSE TFTDisplay_INCLUDES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/include/TFTDisplay/*.h)
 
-add_executable(main_program demo.cpp ${SRC_FILES} ${BPM_SENSOR_SRC_FILES} ${TFTDisplay_SRC_FILES})
+add_executable(main_program main.cpp ${SRC_FILES} ${BPM_SENSOR_SRC_FILES} ${TFTDisplay_SRC_FILES})
 
 # link the wiringPi library
 #target_link_libraries(main_program ${catkin_LIBRARIES} -lwiringPi)

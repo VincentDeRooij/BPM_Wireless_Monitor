@@ -10,18 +10,18 @@ MAX30102 heartSensor;
 
 // Library from https://github.com/garrettluu/max30102-rpi
 
-struct timeval __millis_start;
+struct timeval _millis_start;
 
 void init_millis() {
-    gettimeofday(&__millis_start, NULL);
+    gettimeofday(&_millis_start, NULL);
 };
 
 unsigned long int millis() {
     long mtime, seconds, useconds; 
     struct timeval end;
     gettimeofday(&end, NULL);
-    seconds  = end.tv_sec  - __millis_start.tv_sec;
-    useconds = end.tv_usec - __millis_start.tv_usec;
+    seconds  = end.tv_sec  - _millis_start.tv_sec;
+    useconds = end.tv_usec - _millis_start.tv_usec;
 
     mtime = ((seconds) * 1000 + useconds/1000.0) + 0.5;
     return mtime;
