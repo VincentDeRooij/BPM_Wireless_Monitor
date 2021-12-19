@@ -486,16 +486,16 @@ int main(int argc, char **argv)
     FontxFile fx32G[2];
     FontxFile fx24G[2];
     FontxFile fx16G[2];
-    Fontx_init(fx32G,"./fontx/ILGH32XB.FNT","./fontx/ILGZ32XB.FNT"); // 16x32Dot Gothic
-    Fontx_init(fx24G,"./fontx/ILGH24XB.FNT","./fontx/ILGZ24XB.FNT"); // 12x24Dot Gothic
-    Fontx_init(fx16G,"./fontx/ILGH16XB.FNT","./fontx/ILGZ16XB.FNT"); // 8x16Dot Gothic
+    Fontx_init(fx32G,"/home/ubuntu/GitRepos/BPM_Wireless_Monitor/fontx/ILGH32XB.FNT","/home/ubuntu/GitRepos/BPM_Wireless_Monitor/fontx/ILGZ32XB.FNT"); // 16x32Dot Gothic
+    Fontx_init(fx24G,"/home/ubuntu/GitRepos/BPM_Wireless_Monitor/fontx/ILGH24XB.FNT","/home/ubuntu/GitRepos/BPM_Wireless_Monitor/fontx/ILGZ24XB.FNT"); // 12x24Dot Gothic
+    Fontx_init(fx16G,"/home/ubuntu/GitRepos/BPM_Wireless_Monitor/fontx/ILGH16XB.FNT","/home/ubuntu/GitRepos/BPM_Wireless_Monitor/fontx/ILGZ16XB.FNT"); // 8x16Dot Gothic
 
     FontxFile fx32M[2];
     FontxFile fx24M[2];
     FontxFile fx16M[2];
-    Fontx_init(fx32M,"./fontx/ILMH32XF.FNT","./fontx/ILMZ32XF.FNT"); // 16x32Dot Mincyo
-    Fontx_init(fx24M,"./fontx/ILMH24XF.FNT","./fontx/ILMZ24XF.FNT"); // 12x24Dot Mincyo
-    Fontx_init(fx16M,"./fontx/ILMH16XB.FNT","./fontx/ILMZ16XF.FNT"); // 8x16Dot Mincyo
+    Fontx_init(fx32M,"/home/ubuntu/GitRepos/BPM_Wireless_Monitor/fontx/ILMH32XF.FNT","/home/ubuntu/GitRepos/BPM_Wireless_Monitor/fontx/ILMZ32XF.FNT"); // 16x32Dot Mincyo
+    Fontx_init(fx24M,"/home/ubuntu/GitRepos/BPM_Wireless_Monitor/fontx/ILMH24XF.FNT","/home/ubuntu/GitRepos/BPM_Wireless_Monitor/fontx/ILMZ24XF.FNT"); // 12x24Dot Mincyo
+    Fontx_init(fx16M,"/home/ubuntu/GitRepos/BPM_Wireless_Monitor/fontx/ILMH16XB.FNT","/home/ubuntu/GitRepos/BPM_Wireless_Monitor/fontx/ILMZ16XF.FNT"); // 8x16Dot Mincyo
 
     lcdInit(screenWidth, screenHeight, offsetx, offsety);
     lcdReset();
