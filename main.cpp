@@ -51,12 +51,9 @@
 #define OFFSET_Y 0
 
 // Font
+#define F_TEXT_MAX_SIZE 20 // max size of the word/sentence
 #define FONT_SIZE 32
 #define FONT_BUFFER_SIZE (FONT_SIZE * FONT_SIZE / 8)
-#define PATH_SIZE_MAX 255 // path size of 255 bytes
-#define FOLDER_NAME "/FontGraphics/"
-#define FONT_NAME_X_AXIS "ILGH32XB.FNT"
-#define FONT_NAME_Z_AXIS "ILGH32ZB.FNT"
 FontxFile font[2]; // two fonts Width & Heigth
 
 // HEART SENSOR
@@ -90,20 +87,7 @@ unsigned long int millis()
 
 void setup()
 {
-  char pathBuffer[PATH_SIZE_MAX]; // path length max
-  getwd(pathBuffer);
-  strcat(pathBuffer, FOLDER_NAME);
-
-  char fullPathBufferX[PATH_SIZE_MAX];
-  strcpy(fullPathBufferX, pathBuffer);
-  strcat(fullPathBufferX, FONT_NAME_X_AXIS);
-
-  char fullPathBufferZ[PATH_SIZE_MAX];
-  strcpy(fullPathBufferZ, pathBuffer);
-  strcat(fullPathBufferZ, FONT_NAME_Z_AXIS);
-
-  // init the Font
-  Fontx_init(font, fullPathBufferZ, fullPathBufferX); // 16x32Dot Gothic
+  Fontx_init(font, "/home/ubuntu/GitRepos/BPM_Wireless_Monitor/FontGraphics/ILGH32XB.FNT", "/home/ubuntu/GitRepos/BPM_Wireless_Monitor/FontGraphics/ILGZ32XB.FNT"); // 16x32Dot Gothic
 
   // init the TFT Screen
   lcdInit(TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT, OFFSET_X, OFFSET_Y);
@@ -125,43 +109,27 @@ void setup()
   particleSensor.setPulseAmplitudeRed(0x0A); //Turn Red LED to low to indicate sensor is running
 }
 
-void ColorTest(int width, int height)
-{
-  uint16_t color;
-  lcdFillScreen(WHITE);
-  color = RED;
-  uint16_t delta = height / 16;
-  uint16_t ypos = 0;
-  int i;
-  for (i = 0; i < 16; i++)
-  {
-    lcdDrawFillRect(0, ypos, width - 1, ypos + delta, color);
-    color = color >> 1;
-    ypos = ypos + delta;
-  }
-}
-
-void TextTest(FontxFile *fx, char *txt, int width, int height)
+void TextTest(const char *txt, int width, int height)
 {
   // get font width & height
-  uint8_t buffer[FontxGlyphBufSize];
+  uint8_t buffer[FONT_BUFFER_SIZE];
   uint8_t fontWidth;
   uint8_t fontHeight;
-  GetFontx(fx, 0, buffer, &fontWidth, &fontHeight);
+  GetFontx(font, 0, buffer, &fontWidth, &fontHeight);
+  uint8_t textRefined[F_TEXT_MAX_SIZE];
+  strcpy((char*)textRefined, txt);
 
   uint16_t color;
   lcdFillScreen(BLACK);
-  uint8_t ascii[20];
 
   color = RED;
-  strcpy((char *)ascii, txt);
-  lcdSetFontDirection(DIRECTION0);
-  lcdDrawUTF8String(fx, 0, height - fontHeight - 1, ascii, color);
+  lcdDrawUTF8String(font, 0, height - fontHeight - 1, textRefined, color);
 }
 
 void loop()
 {
-  ColorTest(TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
+//  ColorTest(TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
+//      TextTest(font, "HELLO IAM HERE!", TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
 
   while (1)
   {
@@ -191,21 +159,21 @@ void loop()
         beatAvg /= RATE_SIZE;
       }
     }
-    TextTest(font, "HELLO IAM HERE!", TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
+	std::string val = std::to_string(irValue);
 
-    std::cout << "IR=";
-    std::cout << irValue;
+    TextTest(val.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
+
     std::cout << ", BPM=";
     std::cout << beatsPerMinute;
     std::cout << ", Avg BPM=";
     std::cout << beatAvg;
-    //std::cout << ", Last Millis()=";
-    //std::cout << lastBeat;
 
     if (irValue < 50000)
       std::cout << " No finger?";
 
     std::cout << std::endl;
+
+    usleep(1000*(1000));
   }
 }
 

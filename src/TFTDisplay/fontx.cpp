@@ -28,7 +28,7 @@ bool Fontx_openFontxFile(FontxFile *fx)
   FILE *f;
   //int i;
 
-  printf("Font:%s Path: .\n",fx->path);
+//  printf("Font:%s Path: .\n",fx->path);
 
 
   if(!fx->opened){
