@@ -128,13 +128,8 @@ void TextTest(const char *txt, int width, int height)
 
 void loop()
 {
-<<<<<<< HEAD
 //  ColorTest(TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
 //      TextTest(font, "HELLO IAM HERE!", TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
-=======
-  //ColorTest(TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
-  TextTest(font, "HELLO IAM HERE!", TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
->>>>>>> beded7e9a9e2134e17b1c7076c0ec42a5b27edf4
 
   while (1)
   {
@@ -164,12 +159,9 @@ void loop()
         beatAvg /= RATE_SIZE;
       }
     }
-<<<<<<< HEAD
 	std::string val = std::to_string(irValue);
 
     TextTest(val.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
-=======
->>>>>>> beded7e9a9e2134e17b1c7076c0ec42a5b27edf4
 
     std::cout << ", BPM=";
     std::cout << beatsPerMinute;
