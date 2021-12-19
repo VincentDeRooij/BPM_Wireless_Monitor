@@ -117,7 +117,7 @@ void TextTest(const char *txt, int width, int height)
   uint8_t fontHeight;
   GetFontx(font, 0, buffer, &fontWidth, &fontHeight);
   uint8_t textRefined[F_TEXT_MAX_SIZE];
-  strcpy((char*)textRefined, txt);
+  strcpy((char *)textRefined, txt);
 
   uint16_t color;
   lcdFillScreen(BLACK);
@@ -128,14 +128,6 @@ void TextTest(const char *txt, int width, int height)
 
 void loop()
 {
-<<<<<<< HEAD
-//  ColorTest(TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
-//      TextTest(font, "HELLO IAM HERE!", TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
-=======
-  //ColorTest(TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
-  TextTest(font, "HELLO IAM HERE!", TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
->>>>>>> beded7e9a9e2134e17b1c7076c0ec42a5b27edf4
-
   while (1)
   {
     long irValue = particleSensor.getIR();
@@ -160,16 +152,15 @@ void loop()
         //Take average of readings
         beatAvg = 0;
         for (uint8_t x = 0; x < RATE_SIZE; x++)
+        {
           beatAvg += rates[x];
+        }
         beatAvg /= RATE_SIZE;
       }
     }
-<<<<<<< HEAD
-	std::string val = std::to_string(irValue);
 
+    std::string val = "BPM: " + std::to_string(beatAvg);
     TextTest(val.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
-=======
->>>>>>> beded7e9a9e2134e17b1c7076c0ec42a5b27edf4
 
     std::cout << ", BPM=";
     std::cout << beatsPerMinute;
@@ -181,7 +172,7 @@ void loop()
 
     std::cout << std::endl;
 
-    usleep(1000*(1000));
+    usleep(1000 * (1000));
   }
 }
 
