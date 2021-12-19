@@ -123,8 +123,26 @@ void setup()
   particleSensor.setPulseAmplitudeRed(0x0A); //Turn Red LED to low to indicate sensor is running
 }
 
+void ColorTest(int width, int height)
+{
+  uint16_t color;
+  lcdFillScreen(WHITE);
+  color = RED;
+  uint16_t delta = height / 16;
+  uint16_t ypos = 0;
+  int i;
+  for (i = 0; i < 16; i++)
+  {
+    lcdDrawFillRect(0, ypos, width - 1, ypos + delta, color);
+    color = color >> 1;
+    ypos = ypos + delta;
+  }
+}
+
 void loop()
 {
+  ColorTest(TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
+
   while (1)
   {
     long irValue = particleSensor.getIR();
