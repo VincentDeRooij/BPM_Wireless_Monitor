@@ -132,7 +132,7 @@ void TextTest(const char *txt, int width, int height, int widthOffSet, int heigt
 void loop()
 {
   int maxValueResetCounter = 0;
-  const int maxResetCounterValueAllowed = 1000;
+  const int maxResetCounterValueAllowed = 22;
   lcdFillScreen(BLACK);
 
   long irValue = particleSensor.getIR();
@@ -166,10 +166,12 @@ void loop()
       if (beatMin == 0 || beatMin > beatAvg || maxValueResetCounter == maxResetCounterValueAllowed)
       {
         beatMin = beatAvg;
+        maxValueResetCounter = 0;
       }
       if (beatMax == 0 || beatMax < beatAvg || maxValueResetCounter == maxResetCounterValueAllowed)
       {
         beatMax = beatAvg;
+        maxValueResetCounter++;
       }
       // reset the TFT displat
       lcdFillScreen(BLACK);
@@ -180,8 +182,9 @@ void loop()
       std::string min = "miBPM: " + std::to_string(beatMin);
       TextTest(min.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT, 0, TFT_SCREEN_HEIGHT - (FONT_SIZE * 2) + 1);
 
-      std::string max = "maBPM: " + std::to_string(beatMax);
-      TextTest(max.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT, 0, TFT_SCREEN_HEIGHT - (FONT_SIZE * 3) + 1);
+      //std::string max = "maBPM: " + std::to_string(beatMax);
+      //TextTest(max.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT, 0, TFT_SCREEN_HEIGHT - (FONT_SIZE * 3) + 1);
+      maxValueResetCounter++;
     }
     usleep(20 * (1000));
   }
