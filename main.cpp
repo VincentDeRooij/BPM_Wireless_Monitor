@@ -131,6 +131,8 @@ void TextTest(const char *txt, int width, int height, int widthOffSet, int heigt
 
 void loop()
 {
+  int maxValueResetCounter = 0;
+  const int maxResetCounterValueAllowed = 1000;
   lcdFillScreen(BLACK);
 
   long irValue = particleSensor.getIR();
@@ -157,20 +159,18 @@ void loop()
         for (uint8_t x = 0; x < RATE_SIZE; x++)
         {
           beatAvg += rates[x];
-
-          if (beatMin == 0 || rates[x] > beatAvg)
-          {
-            beatMin = rates[x];
-          }
-          if (beatMax == 0 || rates[x] < beatAvg)
-          {
-            beatMax = rates[x];
-          }
         }
         beatAvg /= RATE_SIZE;
       }
       // check for the min max values
-
+      if (beatMin == 0 || beatMin > beatAvg || maxValueResetCounter == maxResetCounterValueAllowed)
+      {
+        beatMin = beatAvg;
+      }
+      if (beatMax == 0 || beatMax < beatAvg || maxValueResetCounter == maxResetCounterValueAllowed)
+      {
+        beatMax = beatAvg;
+      }
       // reset the TFT displat
       lcdFillScreen(BLACK);
 
