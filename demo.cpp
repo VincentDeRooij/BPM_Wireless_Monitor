@@ -453,33 +453,33 @@ time_t ColorTest(int width, int height) {
 int main(int argc, char **argv)
 {
     int i;
-    int screenWidth = 0;
-    int screenHeight = 0;
+    int screenWidth = 176;
+    int screenHeight = 220;
     int offsetx = 0;
     int offsety = 0;
     char dir[128];
     char cpath[128];
 
-if(_DEBUG_)  printf("argv[0]=%s\n",argv[0]);
-    strcpy(dir, argv[0]);
-    for(i=strlen(dir);i>0;i--) {
-        if (dir[i-1] == '/') {
-          dir[i] = 0;
-          break;
-        } // end if
-    } // end for
-if(_DEBUG_)printf("dir=%s\n",dir);
-    strcpy(cpath,dir);
-    strcat(cpath,"tft.conf");
-if(_DEBUG_)printf("cpath=%s\n",cpath);
-    if (ReadTFTConfig(cpath, &screenWidth, &screenHeight, &offsetx, &offsety) == 0) {
-        printf("%s Not found\n",cpath);
-        return 0;
-    }
-if(_DEBUG_)printf("ReadTFTConfig:screenWidth=%d height=%d\n",screenWidth, screenHeight);
-    printf("Your TFT resolution is %d x %d.\n",screenWidth, screenHeight);
-    printf("Your TFT offsetx    is %d.\n",offsetx);
-    printf("Your TFT offsety    is %d.\n",offsety);
+//if(_DEBUG_)  printf("argv[0]=%s\n",argv[0]);
+//    strcpy(dir, argv[0]);
+//    for(i=strlen(dir);i>0;i--) {
+//        if (dir[i-1] == '/') {
+//          dir[i] = 0;
+//          break;
+//        } // end if
+//    } // end for
+//if(_DEBUG_)printf("dir=%s\n",dir);
+//    strcpy(cpath,dir);
+//    strcat(cpath,"tft.conf");
+//if(_DEBUG_)printf("cpath=%s\n",cpath);
+//    if (ReadTFTConfig(cpath, &screenWidth, &screenHeight, &offsetx, &offsety) == 0) {
+//       printf("%s Not found\n",cpath);
+//        return 0;
+//    }
+//if(_DEBUG_)printf("ReadTFTConfig:screenWidth=%d height=%d\n",screenWidth, screenHeight);
+//   printf("Your TFT resolution is %d x %d.\n",screenWidth, screenHeight);
+//   printf("Your TFT offsetx    is %d.\n",offsetx);
+//   printf("Your TFT offsety    is %d.\n",offsety);
 
 
     // You can change font file

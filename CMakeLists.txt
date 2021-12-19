@@ -23,5 +23,5 @@ target_include_directories(main_program PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inclu
 target_include_directories(main_program PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/TFTDisplay)
 
 # https://techoverflow.net/2021/09/05/how-to-fix-c-error-undefined-reference-to-pthread_rwlock_init/
-target_link_libraries(main_program pthread) 
+target_link_libraries(main_program pthread bcm2835) 
 

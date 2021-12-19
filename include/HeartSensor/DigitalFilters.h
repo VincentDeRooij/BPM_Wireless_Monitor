@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 #include <cmath>
-#include "CircularDelay.hpp"
+#include "CircularDelay.h"
 
 template <typename T>
 constexpr T squareOf(T input) { return input * input; }
