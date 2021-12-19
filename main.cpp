@@ -183,7 +183,7 @@ void loop()
       std::string max = "maBPM: " + std::to_string(beatMax);
       TextTest(max.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT, 0, TFT_SCREEN_HEIGHT - (FONT_SIZE * 3) + 1);
     }
-    usleep(50 * (1000));
+    usleep(20 * (1000));
   }
   //  loop();
 }
