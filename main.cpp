@@ -65,7 +65,7 @@ uint8_t rates[RATE_SIZE]; //Array of heart rates
 uint8_t rateSpot = 0;
 float lastBeat = 0; //Time at which the last beat occurred
 
-int beatsPerMinute;
+int currentBeatsPerMinute;
 int beatAvg;
 
 void init_millis()
@@ -138,15 +138,11 @@ void loop()
       long delta = millis() - lastBeat;
       lastBeat = millis();
 
-      //    std::cout << "DELTA: " << delta << std::endl;
+      currentBeatsPerMinute = 60 / (delta / 1000.0);
 
-      //failSaveBPM = 60 (delta / 1000.0);
-
-      beatsPerMinute = 60 / (delta / 1000.0);
-
-      if (beatsPerMinute < 255 && beatsPerMinute > 20)
+      if (currentBeatsPerMinute < 255 && currentBeatsPerMinute > 20)
       {
-        rates[rateSpot++] = (uint8_t)beatsPerMinute; //Store this reading in the array
+        rates[rateSpot++] = (uint8_t)currentBeatsPerMinute; //Store this reading in the array
         rateSpot %= RATE_SIZE;                       //Wrap variable
 
         //Take average of readings
@@ -157,22 +153,16 @@ void loop()
         }
         beatAvg /= RATE_SIZE;
       }
+
+      std::string val = "BPM: " + std::to_string(beatAvg);
+      TextTest(val.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
     }
 
-    std::string val = "BPM: " + std::to_string(beatAvg);
-    TextTest(val.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
-
-    std::cout << ", BPM=";
-    std::cout << beatsPerMinute;
-    std::cout << ", Avg BPM=";
-    std::cout << beatAvg;
-
     if (irValue < 50000)
-      std::cout << " No finger?";
-
-    std::cout << std::endl;
-
-    usleep(1000 * (1000));
+    {
+      std::cout << " No finger?" << std::endl;
+    }
+    usleep(5 * (1000));
   }
 }
 
