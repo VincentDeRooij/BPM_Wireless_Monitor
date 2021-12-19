@@ -60,13 +60,15 @@ FontxFile font[2]; // two fonts Width & Heigth
 MAX30102 particleSensor;
 struct timeval _millis_start;
 
-#define RATE_SIZE 4       //Increase this for more averaging. 4 is good.
+#define RATE_SIZE 10       //Increase this for more averaging. 4 is good.
 uint8_t rates[RATE_SIZE]; //Array of heart rates
 uint8_t rateSpot = 0;
 float lastBeat = 0; //Time at which the last beat occurred
 
-int currentBeatsPerMinute;
-int beatAvg;
+int currentBeatsPerMinute; // very unstable but when multiple ones are combined a fairly good BPM can be calculated
+int beatAvg; // used for the display
+int beatMin = 0; // BPM minimal value
+int beatMax = 0; // BPM maximum value
 
 void init_millis()
 {
@@ -109,7 +111,7 @@ void setup()
   particleSensor.setPulseAmplitudeRed(0x0A); //Turn Red LED to low to indicate sensor is running
 }
 
-void TextTest(const char *txt, int width, int height)
+void TextTest(const char *txt, int width, int height, int widthOffSet, int heigthOffSet)
 {
   // get font width & height
   uint8_t buffer[FONT_BUFFER_SIZE];
@@ -120,14 +122,19 @@ void TextTest(const char *txt, int width, int height)
   strcpy((char *)textRefined, txt);
 
   uint16_t color;
-  lcdFillScreen(BLACK);
+//  lcdFillScreen(BLACK);
+//  uint16_t xpos = width - fontHeight - offSet;
 
   color = RED;
-  lcdDrawUTF8String(font, 0, height - fontHeight - 1, textRefined, color);
+  lcdDrawUTF8String(font, widthOffSet, heigthOffSet, textRefined, color);
 }
 
 void loop()
 {
+  lcdFillScreen(BLACK);
+
+  long irValue = particleSensor.getIR();
+
   while (1)
   {
     long irValue = particleSensor.getIR();
@@ -153,17 +160,38 @@ void loop()
         }
         beatAvg /= RATE_SIZE;
       }
+	// check for the min max values
+      if(beatMin == 0 || beatMin > beatAvg)
+      {
+	beatMin = beatAvg;
+      }
+      if(beatMax == 0 || beatMax < beatAvg)
+      {
+	beatMax = beatAvg;
+      }
 
-      std::string val = "BPM: " + std::to_string(beatAvg);
-      TextTest(val.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT);
+      lcdFillScreen(BLACK);
+
+      std::string avg  = "cBPM: " + std::to_string(beatAvg);
+      TextTest(avg.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT, 0, (TFT_SCREEN_HEIGHT - FONT_SIZE) + 1);
+
+      std::string min = "miBPM: " + std::to_string(beatMin);
+      TextTest(min.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT, 0, TFT_SCREEN_HEIGHT - (FONT_SIZE * 2) + 1);
+
+      std::string max = "maBPM: " + std::to_string(beatMax);
+      TextTest(max.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT, 0, TFT_SCREEN_HEIGHT - (FONT_SIZE * 3) + 1);
+
+//      lcdFillScreen(BLACK);
     }
 
-    if (irValue < 50000)
-    {
-      std::cout << " No finger?" << std::endl;
-    }
-    usleep(5 * (1000));
+//    if (irValue < 50000)
+//    {
+//	std::cout << "No Finger on Sensor!" << std::endl;/
+//	return;
+//    }
+    usleep(20 * (1000));
   }
+//  loop();
 }
 
 int main()
