@@ -60,15 +60,15 @@ FontxFile font[2]; // two fonts Width & Heigth
 MAX30102 particleSensor;
 struct timeval _millis_start;
 
-#define RATE_SIZE 10       //Increase this for more averaging. 4 is good.
+#define RATE_SIZE 15      //Increase this for more averaging. 4 is good, higher is beter, but also more intensive.
 uint8_t rates[RATE_SIZE]; //Array of heart rates
 uint8_t rateSpot = 0;
 float lastBeat = 0; //Time at which the last beat occurred
 
 int currentBeatsPerMinute; // very unstable but when multiple ones are combined a fairly good BPM can be calculated
-int beatAvg; // used for the display
-int beatMin = 0; // BPM minimal value
-int beatMax = 0; // BPM maximum value
+int beatAvg;               // used for the display
+int beatMin = 0;           // BPM minimal value
+int beatMax = 0;           // BPM maximum value
 
 void init_millis()
 {
@@ -122,8 +122,8 @@ void TextTest(const char *txt, int width, int height, int widthOffSet, int heigt
   strcpy((char *)textRefined, txt);
 
   uint16_t color;
-//  lcdFillScreen(BLACK);
-//  uint16_t xpos = width - fontHeight - offSet;
+  //  lcdFillScreen(BLACK);
+  //  uint16_t xpos = width - fontHeight - offSet;
 
   color = RED;
   lcdDrawUTF8String(font, widthOffSet, heigthOffSet, textRefined, color);
@@ -150,29 +150,31 @@ void loop()
       if (currentBeatsPerMinute < 255 && currentBeatsPerMinute > 20)
       {
         rates[rateSpot++] = (uint8_t)currentBeatsPerMinute; //Store this reading in the array
-        rateSpot %= RATE_SIZE;                       //Wrap variable
+        rateSpot %= RATE_SIZE;                              //Wrap variable
 
         //Take average of readings
         beatAvg = 0;
         for (uint8_t x = 0; x < RATE_SIZE; x++)
         {
           beatAvg += rates[x];
+
+          if (beatMin == 0 || rates[x] > beatAvg)
+          {
+            beatMin = rates[x];
+          }
+          if (beatMax == 0 || rates[x] < beatAvg)
+          {
+            beatMax = rates[x];
+          }
         }
         beatAvg /= RATE_SIZE;
       }
-	// check for the min max values
-      if(beatMin == 0 || beatMin > beatAvg)
-      {
-	beatMin = beatAvg;
-      }
-      if(beatMax == 0 || beatMax < beatAvg)
-      {
-	beatMax = beatAvg;
-      }
+      // check for the min max values
 
+      // reset the TFT displat
       lcdFillScreen(BLACK);
 
-      std::string avg  = "cBPM: " + std::to_string(beatAvg);
+      std::string avg = "cBPM: " + std::to_string(beatAvg);
       TextTest(avg.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT, 0, (TFT_SCREEN_HEIGHT - FONT_SIZE) + 1);
 
       std::string min = "miBPM: " + std::to_string(beatMin);
@@ -180,18 +182,10 @@ void loop()
 
       std::string max = "maBPM: " + std::to_string(beatMax);
       TextTest(max.c_str(), TFT_SCREEN_WIDTH, TFT_SCREEN_HEIGHT, 0, TFT_SCREEN_HEIGHT - (FONT_SIZE * 3) + 1);
-
-//      lcdFillScreen(BLACK);
     }
-
-//    if (irValue < 50000)
-//    {
-//	std::cout << "No Finger on Sensor!" << std::endl;/
-//	return;
-//    }
-    usleep(20 * (1000));
+    usleep(50 * (1000));
   }
-//  loop();
+  //  loop();
 }
 
 int main()
