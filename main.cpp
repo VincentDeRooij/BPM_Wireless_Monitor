@@ -7,13 +7,13 @@ int main(int argc, char const *argv[])
 {
     SerialController controller;
 
-    uint8_t data;
+    uint8_t *data;
 
     while (1)
     {
         data = controller.ReadSerialBus();
 
-        std::cout << "DATA: " << data << std::endl;
+        std::cout << "DATA: " << unsigned(data) << std::endl;
 
         usleep(1000 * 2000); // repeat per 2 sec.
     }

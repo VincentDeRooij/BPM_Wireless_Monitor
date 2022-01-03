@@ -18,7 +18,7 @@ SerialController::SerialController()
     this->uartController.setTimeout(t_out);
 }
 
-uint8_t SerialController::ReadSerialBus()
+uint8_t* SerialController::ReadSerialBus()
 {
     // open the port of the serial controller
     while (!this->uartController.isOpen())
@@ -28,12 +28,12 @@ uint8_t SerialController::ReadSerialBus()
         usleep(1000 * 20); // sleep for 20 us * 1000 = 20ms
     }
 
-    uint8_t msgData = 0;
+    uint8_t msgData[4];
 
     try
     {
         // read serial message
-        size_t msgSize = this->uartController.read((uint8_t *)msgData, sizeof(uint8_t));
+        size_t msgSize = this->uartController.read((uint8_t *)msgData, (sizeof(uint8_t) * 4));
 
         if (msgSize == sizeof(msgData)) // if msg received is of correct size
         {
