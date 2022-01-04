@@ -10,8 +10,17 @@ SerialController::SerialController()
     // set the port
     this->uartController.setPort(COM_PORT_ADDR);
 
-    // set the baudrate
+    // ### Set Serial options ### //
+    // Set the baudrate
     this->uartController.setBaudrate(UART_BAUDRATE);
+    // Set Parity
+    this->uartController.setParity(PARITY_STATE);
+    // Set Bits msgsize
+    this->uartController.setBytesize(BITS);
+    // Set Stop Bits
+    this->uartController.setStopbits(STOP_BITS);
+    // Set Flow control
+    this->uartController.setFlowcontrol(FLOW_CONTROL);
 
     // set the time-out
     serial::Timeout t_out = serial::Timeout::simpleTimeout(PORT_TIME_OUT); // set time-out
@@ -28,9 +37,9 @@ void SerialController::ReadSerialBus()
         usleep(1000 * 20); // sleep for 20 us * 1000 = 20ms
     }
 
-    std::string size = std::to_string(100);
+    std::string size = std::to_string(200);
 
-    auto msgData = this->uartController.read(size.length());
+    auto msgData = this->uartController.read(size.length() + 1);
 
     std::cout << msgData << std::endl;
 
