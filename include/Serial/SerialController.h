@@ -5,8 +5,8 @@
 #include <serial/serial.h>
 #include <stdint.h>
 
-#define UART_BAUDRATE 9600			 // std baudrate (speed) of UART
-#define COM_PORT_ADDR "/dev/ttyAMA0" // uart port of the raspberry pi (tested on RPI v4 Model B)
+#define UART_BAUDRATE 9600		   // std baudrate (speed) of UART
+#define COM_PORT_ADDR "/dev/ttyS0" // uart port of the raspberry pi (tested on RPI v4 Model B)
 #define PORT_TIME_OUT 2500
 
 /**

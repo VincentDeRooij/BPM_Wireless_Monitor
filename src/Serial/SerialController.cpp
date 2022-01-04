@@ -28,12 +28,12 @@ uint8_t* SerialController::ReadSerialBus()
         usleep(1000 * 20); // sleep for 20 us * 1000 = 20ms
     }
 
-    uint8_t msgData[4];
+    uint8_t msgData[10];
 
     try
     {
         // read serial message
-        size_t msgSize = this->uartController.read((uint8_t *)msgData, (sizeof(uint8_t) * 4));
+        size_t msgSize = this->uartController.read((uint8_t *)msgData, (sizeof(uint8_t) * 10));
 
         if (msgSize == sizeof(msgData)) // if msg received is of correct size
         {
