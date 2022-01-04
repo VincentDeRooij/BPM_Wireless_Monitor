@@ -19,7 +19,7 @@ private:
 	serial::Serial uartController;
 
 public:
-	uint8_t *ReadSerialBus();
+	void ReadSerialBus();
 
 	SerialController();
 	~SerialController() = default;

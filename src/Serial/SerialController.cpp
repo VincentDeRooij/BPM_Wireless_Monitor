@@ -18,7 +18,7 @@ SerialController::SerialController()
     this->uartController.setTimeout(t_out);
 }
 
-uint8_t* SerialController::ReadSerialBus()
+void SerialController::ReadSerialBus()
 {
     // open the port of the serial controller
     while (!this->uartController.isOpen())
@@ -28,21 +28,23 @@ uint8_t* SerialController::ReadSerialBus()
         usleep(1000 * 20); // sleep for 20 us * 1000 = 20ms
     }
 
-    uint8_t msgData[10];
+    std::string size = std::to_string(100);
 
-    try
-    {
-        // read serial message
-        size_t msgSize = this->uartController.read((uint8_t *)msgData, (sizeof(uint8_t) * 10));
+    auto msgData = this->uartController.read(size.length());
 
-        if (msgSize == sizeof(msgData)) // if msg received is of correct size
-        {
-            return msgData;
-        }
-    }
-    catch (const std::exception &e)
-    {
-        std::cout << "Error Serial Message incorrect!" << std::endl;
-    }
-    return msgData; // if this is returned something went wrong, value returned = 0
+    std::cout << msgData << std::endl;
+
+    // //uint8_t msgData[10];
+
+    // try
+    // {
+    //     // read serial message
+
+    //     return msgData;
+    // }
+    // catch (const std::exception &e)
+    // {
+    //     std::cout << "Error Serial Message incorrect!" << std::endl;
+    // }
+    // return msgData; // if this is returned something went wrong, value returned = 0
 }
