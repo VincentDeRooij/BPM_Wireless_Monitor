@@ -9,7 +9,7 @@
 #define PORT_TIME_OUT 1000
 
 // Serial Options
-#define UART_BAUDRATE 112500 // std baudrate (speed) of UART
+#define UART_BAUDRATE 9600 // std baudrate (speed) of UART
 #define PARITY_STATE serial::parity_none
 #define BITS serial::bytesize_t::eightbits
 #define STOP_BITS serial::stopbits_t::stopbits_one

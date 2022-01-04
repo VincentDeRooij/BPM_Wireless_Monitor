@@ -12,7 +12,7 @@ int main(int argc, char const *argv[])
 
     while (1)
     {
-        // controller.ReadSerialBus();
+        controller.ReadSerialBus();
 
         // memcpy(&formData, &data, sizeof(uint8_t) * 10);
 

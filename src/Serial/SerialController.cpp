@@ -37,7 +37,9 @@ void SerialController::ReadSerialBus()
         usleep(1000 * 20); // sleep for 20 us * 1000 = 20ms
     }
 
-    std::string size = std::to_string(200);
+    std::cout << "Probing...." << std::endl;
+
+    std::string size = std::to_string(100);
 
     auto msgData = this->uartController.read(size.length() + 1);
 
