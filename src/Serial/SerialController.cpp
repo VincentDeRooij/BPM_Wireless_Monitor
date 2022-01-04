@@ -5,6 +5,11 @@
 
 #include <exception>
 
+struct SerialControllerDataPack
+{
+    int data;
+};
+
 SerialController::SerialController()
 {
     // set the port
@@ -41,9 +46,13 @@ void SerialController::ReadSerialBus()
 
     std::string size = std::to_string(100);
 
-    auto msgData = this->uartController.read(size.length() + 1);
+    SerialControllerDataPack pack;
 
-    std::cout << msgData << std::endl;
+    auto msgData = this->uartController.read((uint8_t *)&pack.data, sizeof(pack));
+
+    std::cout << pack.data << std::endl;
+
+    this->uartController.flush();
 
     // //uint8_t msgData[10];
 

@@ -7,9 +7,6 @@ int main(int argc, char const *argv[])
 {
     SerialController controller;
 
-    uint8_t *data;
-    uint8_t formData[10];
-
     while (1)
     {
         controller.ReadSerialBus();
