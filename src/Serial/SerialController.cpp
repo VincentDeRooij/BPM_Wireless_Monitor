@@ -1,5 +1,5 @@
 #include "SerialController.h"
-#include <serial/serial.h>
+//#include <serial/serial.h>
 #include <unistd.h> // UNIX SYSTEM SPECIFIC
 #include <iostream>
 
@@ -13,34 +13,25 @@ struct SerialControllerDataPack
 SerialController::SerialController()
 {
     // set the port
-    this->uartController.setPort(COM_PORT_ADDR);
+    this->uartController.SetDevice(COM_PORT_ADDR);
 
     // ### Set Serial options ### //
     // Set the baudrate
-    this->uartController.setBaudrate(UART_BAUDRATE);
+    this->uartController.SetBaudRate(UART_BAUDRATE);
     // Set Parity
-    this->uartController.setParity(PARITY_STATE);
+    this->uartController.SetParity(PARITY_STATE);
     // Set Bits msgsize
-    this->uartController.setBytesize(BITS);
+    this->uartController.SetNumDataBits(BITS);
     // Set Stop Bits
-    this->uartController.setStopbits(STOP_BITS);
+    this->uartController.SetNumStopBits(STOP_BITS);
     // Set Flow control
-    this->uartController.setFlowcontrol(FLOW_CONTROL);
-
-    // set the time-out
-    serial::Timeout t_out = serial::Timeout::simpleTimeout(PORT_TIME_OUT); // set time-out
-    this->uartController.setTimeout(t_out);
+    this->uartController.SetTimeout(PORT_TIME_OUT);
 }
 
 void SerialController::ReadSerialBus()
 {
     // open the port of the serial controller
-    while (!this->uartController.isOpen())
-    {
-        this->uartController.open();
-
-        usleep(1000 * 20); // sleep for 20 us * 1000 = 20ms
-    }
+    this->uartController.Open();
 
     std::cout << "Probing...." << std::endl;
 
@@ -48,23 +39,8 @@ void SerialController::ReadSerialBus()
 
     SerialControllerDataPack pack;
 
-    auto msgData = this->uartController.read((uint8_t *)&pack.data, sizeof(pack));
-
     std::cout << pack.data << std::endl;
 
-    this->uartController.flush();
-
-    // //uint8_t msgData[10];
-
-    // try
-    // {
-    //     // read serial message
-
-    //     return msgData;
-    // }
-    // catch (const std::exception &e)
-    // {
-    //     std::cout << "Error Serial Message incorrect!" << std::endl;
-    // }
-    // return msgData; // if this is returned something went wrong, value returned = 0
+    std::string readData;
+    this->uartController.Read(readData);
 }

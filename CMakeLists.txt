@@ -11,10 +11,10 @@ file(GLOB_RECURSE TFTDisplay_SRC_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_
 file(GLOB_RECURSE SERIAL_SRC_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/Serial/*.cpp)
 
 # add the Serial library components: LIB_Source http://wjwwood.io/serial/ 
-find_package(serial) # this line is needed for the work-around to find the MANUALLY installed serial library
-find_package(catkin REQUIRED COMPONENTS 
-    serial 
-)
+#find_package(serial) # this line is needed for the work-around to find the MANUALLY installed serial library
+#find_package(catkin REQUIRED COMPONENTS 
+#    serial 
+#)
 
 # include all the include files of the BPM Monitor library
 #file(GLOB_RECURSE BPM_MONITOR_INCLUDES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/include/HeartSensor/*.h)
