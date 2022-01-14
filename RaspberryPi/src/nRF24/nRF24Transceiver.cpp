@@ -45,14 +45,12 @@ void setToTransmitterType(float payload)
 {
     transceiver.stopListening(); // put radio in TX mode
 
-    float data = 100.0;
-
     unsigned int failure = 0; // keep track of failures
     while (failure < 6)
     {
         // clock_gettime(CLOCK_MONOTONIC_RAW, &startTimer);          // start the timer
-        bool report = transceiver.write(&data, sizeof(int)); // transmit & save the report
-        uint32_t timerEllapsed = timer.getElapsedMicros();   // end the timer
+        bool report = transceiver.write(&payload, sizeof(int)); // transmit & save the report
+        uint32_t timerEllapsed = timer.getElapsedMicros();      // end the timer
 
         if (report)
         {
