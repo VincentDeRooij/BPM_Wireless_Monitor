@@ -66,7 +66,7 @@ void nRFWriteAndTransmit(float payload)
     }
     else
     {
-        std::cout << failure << "TX: Failures detected! Check for connection of wiring..." << std::endl;
+        std::cout << amountOfFailures << "- TX: Failures detected! Check for connection of wiring..." << std::endl;
         amountOfFailures = 0;
     }
 }
@@ -88,7 +88,7 @@ void nRFReceiveAndRead(float &payload)
     }
     else
     {
-        std::cout << "RX: Nothing received! Check for connection of wiring..." << std::endl;
+        std::cout << amountOfFailures << "- RX: Nothing received! Check for connection of wiring..." << std::endl;
         amountOfFailures = 0;
     }
 }
