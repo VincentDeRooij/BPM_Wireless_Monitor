@@ -6,6 +6,7 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.
 # include all the src files of the Serial controller
 file(GLOB_RECURSE SERIAL_SRC_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/Serial/*.cpp)
 file(GLOB_RECURSE NRF24_SRC_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/nRF24/*.cpp)
+file(GLOB_RECURSE UTILS_SRC_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/Utils/*.cpp)
 
 
 
@@ -24,13 +25,16 @@ file(GLOB_RECURSE TFTDisplay_SRC_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_
 # include all the include files of the TFTDisplay library
 #file(GLOB_RECURSE TFTDisplay_INCLUDES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/include/TFTDisplay/*.h)
 
-add_executable(main_program main.cpp ${SRC_FILES} ${BPM_SENSOR_SRC_FILES} ${TFTDisplay_SRC_FILES} ${SERIAL_SRC_FILES})
+add_executable(main_program main.cpp ${SRC_FILES} ${BPM_SENSOR_SRC_FILES} ${TFTDisplay_SRC_FILES} ${SERIAL_SRC_FILES} ${NRF24_SRC_FILES} ${UTILS_SRC_FILES})
 
 # link the wiringPi library
 #target_link_libraries(main_program ${catkin_LIBRARIES} -lwiringPi)
 
+# add and link the include files 
 target_include_directories(main_program PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(main_program PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/Serial)
+target_include_directories(main_program PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/nRF24)
+target_include_directories(main_program PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/Utils)
 
 # Back-up code includes
 target_include_directories(main_program PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/Backup/HeartSensor)
@@ -38,5 +42,5 @@ target_include_directories(main_program PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inclu
 
 # https://techoverflow.net/2021/09/05/how-to-fix-c-error-undefined-reference-to-pthread_rwlock_init/
 # https://www.techworked.com/install-bcm2835-library-in-raspberry-pi/ install the bcm2835 controller
-target_link_libraries(main_program ${catkin_LIBRARIES} pthread bcm2835 -lCppLinuxSerial -lwiringPi) # add the bcm2835 spi controller
+target_link_libraries(main_program ${catkin_LIBRARIES} pthread -lCppLinuxSerial -lwiringPi -lrf24) # add the bcm2835 spi controller
 

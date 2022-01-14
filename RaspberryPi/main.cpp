@@ -1,10 +1,13 @@
 #include <iostream>
 #include <unistd.h>
 
+#include <CppLinuxSerial/SerialPort.hpp>
+
 #include "SerialController.h"
 
-#include <CppLinuxSerial/SerialPort.hpp>
-#include <RF24/RF24.h>
+#include "nRF24Transceiver.h"
+
+bool nRF24IsActive = true;
 
 using namespace mn::CppLinuxSerial;
 
@@ -16,6 +19,14 @@ int main(int argc, char const *argv[])
     // Use SerialPort serialPort("/dev/ttyACM0", 13000); instead if you want to provide a custom baud rate
     serialPort.SetTimeout(-1); // Block when reading until any data is received
     serialPort.Open();
+
+    if (nRF24IsActive)
+    {
+        setupTransceiver();
+        dataPayload = 100;
+        setToTransmitterType();
+        //setRoleOfTransceiver(TRANCSEIVER_ROLE_TYPE::TRANSMITTER);
+    }
 
     while (1)
     {
@@ -29,6 +40,10 @@ int main(int argc, char const *argv[])
         std::cout << "DATA: " << readData << std::endl;
 
         usleep(1000 * 2000);
+
+        if (nRF24IsActive)
+        {
+        }
     }
 
     // Close the serial port
