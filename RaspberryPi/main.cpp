@@ -24,7 +24,7 @@ int main(int argc, char const *argv[])
     {
         setupTransceiver();
         int data = 100;
-        setToTransmitterType(dataPayload);
+        setToTransmitterType(data);
         //setRoleOfTransceiver(TRANCSEIVER_ROLE_TYPE::TRANSMITTER);
     }
 
