@@ -41,7 +41,9 @@ int main(int argc, char const *argv[])
 
     // enter the while-loop to constantly receive (from Arduino) and send data to the ESP
     while (true)
-    {
+    {        
+        std::cout << std::endl; // add a new line to make it more readable in the console
+
         std::cout << "------------------------UART RECEIVER-----------------------" << std::endl;
         // Read UART/Serial port
         serialPort.Read(readData);
