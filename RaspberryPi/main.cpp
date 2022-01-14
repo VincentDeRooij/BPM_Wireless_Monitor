@@ -41,24 +41,26 @@ int main(int argc, char const *argv[])
 
     // enter the while-loop to constantly receive (from Arduino) and send data to the ESP
     while (true)
-    {
-        std::cout << "------------------UART RECEIVER----------------------" << std::endl;
+    {        
+        std::cout << "<<<-------------------------------START_OF_EPOCH---------------------------------->>>" << std::endl;
+
+        std::cout << ------------------------"UART RECEIVER-----------------------" << std::endl;
         // Read UART/Serial port
         serialPort.Read(readData);
-        std::cout << "Data received: " << readData << std::endl;
+        std::cout << "UART: Data received: " << readData << std::endl;
 
-        std::cout << "------------------NRF24 TRANSMITTER----------------------" << std::endl;
+        std::cout << ----------------------"NRF24 TRANSMITTER---------------------" << std::endl;
         // if nRF24 module is active and ready for use
         if (nRFIsAvailable == true && readData.length() != 0)
         {
-	    std::cout << "Sending data...." << std::endl;
+	    std::cout << "NRF24: Sending data...." << std::endl;
             // convert the value needed to the propper type
             std::istringstream strValue(readData);
             strValue >> data;
             nRFWriteAndTransmit(data);
         }
         
-        std::cout << "------------------END_OF_EPOCH----------------------" << std::endl;
+        std::cout << "<<<-------------------------------END_OF_EPOCH---------------------------------->>>" << std::endl;
 
         // sleep for two seconds
         usleep(1000 * 2000);

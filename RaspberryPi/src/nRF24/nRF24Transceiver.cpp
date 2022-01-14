@@ -11,7 +11,7 @@ unsigned int amountOfFailures = 0; // keep track of failures
 
 bool setupTransceiver()
 {
-    std::cout << "MODULE SETTING UP" << std::endl;
+    std::cout << "NRF24: MODULE SETTING UP" << std::endl;
 
     // start the transceiver
     if (!transceiver.begin())
@@ -23,7 +23,7 @@ bool setupTransceiver()
     // Fix to make sure it works (happens with alot of modules)
     transceiver.setAutoAck(false);
 
-    std::cout << "MODULE ONLINE!" << std::endl;
+    std::cout << "NRF24: MODULE ONLINE!" << std::endl;
 
     // setup the payload size
     transceiver.setPayloadSize(sizeof(int));
@@ -54,13 +54,13 @@ void nRFWriteAndTransmit(float payload)
         if (report == true)
         {
             // payload was delivered
-            std::cout << "Transmission successful! Time to transmit = ";
+            std::cout << "NRF24: Transmission successful! Time to transmit = ";
             std::cout << " Sent: " << payload << std::endl; // print payload sent
         }
         else
         {
             // payload was not delivered
-            std::cout << "Transmission failed or timed out" << std::endl;
+            std::cout << "NRF24: Transmission failed or timed out" << std::endl;
             amountOfFailures++;
         }
     }
@@ -81,7 +81,7 @@ void nRFReceiveAndRead(float &payload)
         {                                                         // is there a payload? get the pipe number that recieved it
             uint8_t bytes = transceiver.getPayloadSize();         // get the size of the payload
             transceiver.read(&payload, bytes);                    // fetch payload from FIFO
-            std::cout << "Received " << (unsigned int)bytes;      // print the size of the payload
+            std::cout << "NRF24: Received " << (unsigned int)bytes;      // print the size of the payload
             std::cout << " bytes on pipe " << (unsigned int)pipe; // print the pipe number
             std::cout << ": " << payload << std::endl;            // print the payload's value
         }
