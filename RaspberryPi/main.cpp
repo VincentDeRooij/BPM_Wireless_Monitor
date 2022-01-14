@@ -44,12 +44,12 @@ int main(int argc, char const *argv[])
     {        
         std::cout << "<<<-------------------------------START_OF_EPOCH---------------------------------->>>" << std::endl;
 
-        std::cout << ------------------------"UART RECEIVER-----------------------" << std::endl;
+        std::cout << "------------------------UART RECEIVER-----------------------" << std::endl;
         // Read UART/Serial port
         serialPort.Read(readData);
         std::cout << "UART: Data received: " << readData << std::endl;
 
-        std::cout << ----------------------"NRF24 TRANSMITTER---------------------" << std::endl;
+        std::cout << "------------------------NRF24 TRANSMITTER---------------------" << std::endl;
         // if nRF24 module is active and ready for use
         if (nRFIsAvailable == true && readData.length() != 0)
         {
