@@ -42,14 +42,13 @@ int main(int argc, char const *argv[])
     // enter the while-loop to constantly receive (from Arduino) and send data to the ESP
     while (true)
     {        
-        std::cout << std::endl; // add a new line to make it more readable in the console
 
         std::cout << "------------------------UART RECEIVER-----------------------" << std::endl;
         // Read UART/Serial port
         serialPort.Read(readData);
         std::cout << "UART: Data received: " << readData << std::endl;
 
-        std::cout << "------------------------NRF24 TRANSMITTER---------------------" << std::endl;
+        std::cout << "------------------------NRF24 TRANSMITTER---------------------" << std::endl << std::endl;
         // if nRF24 module is active and ready for use
         if (nRFIsAvailable == true && readData.length() != 0)
         {
