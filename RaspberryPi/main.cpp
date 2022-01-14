@@ -4,6 +4,7 @@
 #include "SerialController.h"
 
 #include <CppLinuxSerial/SerialPort.hpp>
+#include <RF24/RF24.h>
 
 using namespace mn::CppLinuxSerial;
 
@@ -27,7 +28,7 @@ int main(int argc, char const *argv[])
         serialPort.Read(readData);
         std::cout << "DATA: " << readData << std::endl;
 
-        usleep(1000 * 3000);
+        usleep(1000 * 2000);
     }
 
     // Close the serial port
