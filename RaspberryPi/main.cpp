@@ -1,70 +1,64 @@
 #include <iostream>
 #include <unistd.h>
 
+// string to <type> conversion
+#include <string>
+#include <sstream>
+
 #include <CppLinuxSerial/SerialPort.hpp>
 
 #include "SerialController.h"
 
 #include "nRF24Transceiver.h"
 
-bool nRF24IsActive = true;
-
+bool nRF24IsNotSetUp = true;
 using namespace mn::CppLinuxSerial;
+bool nRFIsAvailable = false;
 
 int main(int argc, char const *argv[])
 {
+    // Debug message for testing
     std::cout << "STARTING PROGRAM" << std::endl;
 
     // Create serial port object and open serial port at 57600 buad, 8 data bits, no parity bit, and one stop bit (8n1)
     SerialPort serialPort("/dev/ttyS0", BaudRate::B_9600, NumDataBits::EIGHT, Parity::NONE, NumStopBits::ONE);
-    // Use SerialPort serialPort("/dev/ttyACM0", 13000); instead if you want to provide a custom baud rate
     serialPort.SetTimeout(-1); // Block when reading until any data is received
-    serialPort.Open();
-
+    serialPort.Open();         // open the serial port connection
     std::cout << "SERIAL PORT OPEN!" << std::endl;
 
-    if (nRF24IsActive)
+    if (nRF24IsNotSetUp)
     {
+        nRF24IsNotSetUp = false;
         std::cout << "NRF24 MODULE SETTING UP" << std::endl;
-
         setupTransceiver();
-        float data = 100.0;
-        setToTransmitterType(data);
-        //setRoleOfTransceiver(TRANCSEIVER_ROLE_TYPE::TRANSMITTER);
+        std::cout << "NRF24 MODULE AVAILABLE!" << std::endl;
+        nRFIsAvailable = true;
     }
 
-    while (1)
-    {
-        // Write some ASCII data
-        //serialPort.Write("Hello");
+    // initialize the values
+    float data = 0.0;
+    std::string readData = "";
 
-        // Read some data back (will block until at least 1 byte is received due to the SetTimeout(-1) call above)
-        std::string readData;
+    // enter the while-loop to constantly receive (from Arduino) and send data to the ESP
+    while (true)
+    {
+        // Read UART/Serial port
         serialPort.Read(readData);
         std::cout << "DATA: " << readData << std::endl;
 
-        usleep(1000 * 2000);
-
-        if (nRF24IsActive)
+        // if nRF24 module is active and ready for use
+        if (nRFIsAvailable == true && readData.length() != 0)
         {
+            // convert the value needed to the propper type
+            std::istringstream strValue(readData);
+            strValue >> data;
+            nRFWriteAndTransmit(data);
         }
+
+        // sleep for two seconds
+        usleep(1000 * 2000);
     }
     // Close the serial port
     serialPort.Close();
-
-    // SerialController controller;
-
-    // while (1)
-    // {
-    //     controller.ReadSerialBus();
-
-    //     // memcpy(&formData, &data, sizeof(uint8_t) * 10);
-
-    //     // std::cout << "DATA_t_0: " << formData[1] << std::endl;
-    //     // std::cout << "DATA_t_1: " << unsigned(formData[1]) << std::endl;
-
-    //     usleep(1000 * 1000); // repeat per 2 sec.
-    // }
-
-    // return 0;
+    return 0;
 }

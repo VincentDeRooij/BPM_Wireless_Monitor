@@ -21,8 +21,8 @@ enum TRANCSEIVER_ROLE_TYPE
 };
 
 bool setupTransceiver();
-void setToTransmitterType(float payload); // Master type
-void setToReceiverType(int &payload);	  // Slave type
+void nRFWriteAndTransmit(float payload); // Master type
+void nRFReceiveAndRead(float &payload);	 // Slave type
 //void setRoleOfTransceiver(TRANCSEIVER_ROLE_TYPE type);
 
 #endif // __NRF24TRANSCEIVER_H__

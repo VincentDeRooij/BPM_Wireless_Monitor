@@ -8,11 +8,9 @@
 
 class MicroTimer
 {
-private:
+public:
 	time_t microsTimer;
 	struct timespec startTimer, endTimer;
-
-public:
 	uint32_t getElapsedMicros();
 
 	MicroTimer();

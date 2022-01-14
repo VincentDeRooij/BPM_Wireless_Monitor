@@ -7,6 +7,7 @@ MicroTimer timer;
 RF24 transceiver(CE_PIN, 0);
 
 const uint64_t linkerPipe = 0xF0F0F0F0D2LL;
+unsigned int amountOfFailures = 0; // keep track of failures
 
 bool setupTransceiver()
 {
@@ -41,45 +42,39 @@ bool setupTransceiver()
 }
 
 // Master type
-void setToTransmitterType(float payload)
+void nRFWriteAndTransmit(float payload)
 {
     transceiver.stopListening(); // put radio in TX mode
 
-    unsigned int failure = 0; // keep track of failures
-    while (failure < 6)
+    if (amountOfFailures < 6)
     {
         // clock_gettime(CLOCK_MONOTONIC_RAW, &startTimer);          // start the timer
         bool report = transceiver.write(&payload, sizeof(int)); // transmit & save the report
-        uint32_t timerEllapsed = timer.getElapsedMicros();      // end the timer
 
-        if (report)
+        if (report == true)
         {
             // payload was delivered
             std::cout << "Transmission successful! Time to transmit = ";
-            std::cout << timerEllapsed;                         // print the timer result
-            std::cout << " us. Sent: " << payload << std::endl; // print payload sent
-            payload += 0.01;                                    // increment float payload
+            std::cout << " Sent: " << payload << std::endl; // print payload sent
         }
         else
         {
             // payload was not delivered
             std::cout << "Transmission failed or timed out" << std::endl;
-            failure++;
+            amountOfFailures++;
         }
-
-        // to make this example readable in the terminal
-        delay(1000); // slow transmissions down by 1 second
     }
-    std::cout << failure << " failures detected. Leaving TX role." << std::endl;
+    else
+    {
+        std::cout << failure << "TX: Failures detected! Check for connection of wiring..." << std::endl;
+        amountOfFailures = 0;
+    }
 }
 
-// Slave type
-void setToReceiverType(int &payload)
+// Slave type, not necessary in this case
+void nRFReceiveAndRead(float &payload)
 {
-    transceiver.startListening(); // put radio in RX mode
-
-    time_t startTimer = time(nullptr); // start a timer
-    while (time(nullptr) - startTimer < 6)
+    if (amountOfFailures < 6)
     { // use 6 second timeout
         uint8_t pipe;
         if (transceiver.available(&pipe))
@@ -89,11 +84,13 @@ void setToReceiverType(int &payload)
             std::cout << "Received " << (unsigned int)bytes;      // print the size of the payload
             std::cout << " bytes on pipe " << (unsigned int)pipe; // print the pipe number
             std::cout << ": " << payload << std::endl;            // print the payload's value
-            startTimer = time(nullptr);                           // reset timer
         }
     }
-    std::cout << "Nothing received in 6 seconds. Leaving RX role." << std::endl;
-    transceiver.stopListening();
+    else
+    {
+        std::cout << "RX: Nothing received! Check for connection of wiring..." << std::endl;
+        amountOfFailures = 0;
+    }
 }
 
 // /**
@@ -106,11 +103,11 @@ void setToReceiverType(int &payload)
 //     switch (type)
 //     {
 //     case TRANCSEIVER_ROLE_TYPE::TRANSMITTER:
-//         setToTransmitterType();
+//         nRFWriteAndTransmit();
 //         break;
 
 //     case TRANCSEIVER_ROLE_TYPE::RECEIVER:
-//         setToReceiverType();
+//         nRFReceiveAndRead();
 //         break;
 
 //     default:
