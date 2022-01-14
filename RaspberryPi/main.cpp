@@ -13,6 +13,7 @@ using namespace mn::CppLinuxSerial;
 
 int main(int argc, char const *argv[])
 {
+    std::cout << "STARTING PROGRAM" << std::endl;
 
     // Create serial port object and open serial port at 57600 buad, 8 data bits, no parity bit, and one stop bit (8n1)
     SerialPort serialPort("/dev/ttyS0", BaudRate::B_9600, NumDataBits::EIGHT, Parity::NONE, NumStopBits::ONE);
@@ -20,8 +21,12 @@ int main(int argc, char const *argv[])
     serialPort.SetTimeout(-1); // Block when reading until any data is received
     serialPort.Open();
 
+    std::cout << "SERIAL PORT OPEN!" << std::endl;
+
     if (nRF24IsActive)
     {
+	std::cout << "NRF24 MODULE SETTING UP" << std::endl;
+
         setupTransceiver();
         int data = 100;
         setToTransmitterType(data);
@@ -30,7 +35,6 @@ int main(int argc, char const *argv[])
 
     while (1)
     {
-
         // Write some ASCII data
         //serialPort.Write("Hello");
 
@@ -45,7 +49,6 @@ int main(int argc, char const *argv[])
         {
         }
     }
-
     // Close the serial port
     serialPort.Close();
 

@@ -42,5 +42,5 @@ target_include_directories(main_program PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inclu
 
 # https://techoverflow.net/2021/09/05/how-to-fix-c-error-undefined-reference-to-pthread_rwlock_init/
 # https://www.techworked.com/install-bcm2835-library-in-raspberry-pi/ install the bcm2835 controller
-target_link_libraries(main_program ${catkin_LIBRARIES} pthread -lCppLinuxSerial -lwiringPi -lrf24) # add the bcm2835 spi controller
+target_link_libraries(main_program ${catkin_LIBRARIES} pthread -lCppLinuxSerial -lbcm2835 -lwiringPi -lrf24) # add the bcm2835 spi controller
 

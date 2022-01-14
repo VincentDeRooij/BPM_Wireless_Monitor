@@ -4,13 +4,15 @@
 #include "MicroTimer.h"
 
 MicroTimer timer;
-RF24 transceiver(CE_PIN, CSN_PIN);
+RF24 transceiver(CE_PIN, 0);
 
 uint8_t transmitterIDAddress[6] = {"MASTR"};
 uint8_t receiverIDAddress[6] = {"SLAVE"};
 
 bool setupTransceiver()
 {
+    std::cout << "MODULE SETTING UP" << std::endl;
+
     // start the transceiver
     if (!transceiver.begin())
     {
@@ -18,8 +20,10 @@ bool setupTransceiver()
         return 0; // quit now
     }
 
+    std::cout << "MODULE ONLINE!" << std::endl;
+
     // setup the payload size
-    transceiver.setPayloadSize(PAYLOAD_SIZE);
+    transceiver.setPayloadSize(sizeof(int));
 
     // setup the PA level
     transceiver.setPALevel(PA_LEVEL);
@@ -36,11 +40,13 @@ void setToTransmitterType(int payload)
 {
     transceiver.stopListening(); // put radio in TX mode
 
+    int data = 100;
+
     unsigned int failure = 0; // keep track of failures
     while (failure < 6)
     {
         // clock_gettime(CLOCK_MONOTONIC_RAW, &startTimer);          // start the timer
-        bool report = transceiver.write(&payload, sizeof(PAYLOAD_SIZE)); // transmit & save the report
+        bool report = transceiver.write(&data, sizeof(int)); // transmit & save the report
         uint32_t timerEllapsed = timer.getElapsedMicros();               // end the timer
 
         if (report)
