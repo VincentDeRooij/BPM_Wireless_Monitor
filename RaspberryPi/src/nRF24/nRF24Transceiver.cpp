@@ -8,14 +8,13 @@ RF24 transceiver(CE_PIN, CSN_PIN);
 
 uint8_t transmitterIDAddress[6] = {"MASTR"};
 uint8_t receiverIDAddress[6] = {"SLAVE"};
-int dataPayload = 0;
 
 bool setupTransceiver()
 {
     // start the transceiver
     if (!transceiver.begin())
     {
-        cout << "nRF24 transceiver is not responding!" << endl;
+        std::cout << "nRF24 transceiver is not responding!" << std::endl;
         return 0; // quit now
     }
 
@@ -33,7 +32,7 @@ bool setupTransceiver()
 }
 
 // Master type
-void setToTransmitterType()
+void setToTransmitterType(int payload)
 {
     transceiver.stopListening(); // put radio in TX mode
 
@@ -47,22 +46,22 @@ void setToTransmitterType()
         if (report)
         {
             // payload was delivered
-            cout << "Transmission successful! Time to transmit = ";
-            cout << timerEllapsed;                    // print the timer result
-            cout << " us. Sent: " << payload << endl; // print payload sent
-            payload += 0.01;                          // increment float payload
+            std::cout << "Transmission successful! Time to transmit = ";
+            std::cout << timerEllapsed;                         // print the timer result
+            std::cout << " us. Sent: " << payload << std::endl; // print payload sent
+            payload += 0.01;                                    // increment float payload
         }
         else
         {
             // payload was not delivered
-            cout << "Transmission failed or timed out" << endl;
+            std::cout << "Transmission failed or timed out" << std::endl;
             failure++;
         }
 
         // to make this example readable in the terminal
         delay(1000); // slow transmissions down by 1 second
     }
-    cout << failure << " failures detected. Leaving TX role." << endl;
+    std::cout << failure << " failures detected. Leaving TX role." << std::endl;
 }
 
 // Slave type
@@ -75,16 +74,16 @@ void setToReceiverType(int &payload)
     { // use 6 second timeout
         uint8_t pipe;
         if (transceiver.available(&pipe))
-        {                                                    // is there a payload? get the pipe number that recieved it
-            uint8_t bytes = transceiver.getPayloadSize();    // get the size of the payload
-            transceiver.read(&payload, bytes);               // fetch payload from FIFO
-            cout << "Received " << (unsigned int)bytes;      // print the size of the payload
-            cout << " bytes on pipe " << (unsigned int)pipe; // print the pipe number
-            cout << ": " << payload << endl;                 // print the payload's value
-            startTimer = time(nullptr);                      // reset timer
+        {                                                         // is there a payload? get the pipe number that recieved it
+            uint8_t bytes = transceiver.getPayloadSize();         // get the size of the payload
+            transceiver.read(&payload, bytes);                    // fetch payload from FIFO
+            std::cout << "Received " << (unsigned int)bytes;      // print the size of the payload
+            std::cout << " bytes on pipe " << (unsigned int)pipe; // print the pipe number
+            std::cout << ": " << payload << std::endl;            // print the payload's value
+            startTimer = time(nullptr);                           // reset timer
         }
     }
-    cout << "Nothing received in 6 seconds. Leaving RX role." << endl;
+    std::cout << "Nothing received in 6 seconds. Leaving RX role." << std::endl;
     transceiver.stopListening();
 }
 

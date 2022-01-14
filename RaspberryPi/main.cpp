@@ -23,8 +23,8 @@ int main(int argc, char const *argv[])
     if (nRF24IsActive)
     {
         setupTransceiver();
-        dataPayload = 100;
-        setToTransmitterType();
+        int data = 100;
+        setToTransmitterType(dataPayload);
         //setRoleOfTransceiver(TRANCSEIVER_ROLE_TYPE::TRANSMITTER);
     }
 
