@@ -35,6 +35,9 @@ bool setupTransceiver()
 
     // setup the RX address of the TX node into a RX pipe
     transceiver.openReadingPipe(1, pipes[1]); // using pipe 1, using the receiver ID address
+
+    transceiver.printDetails();       // (smaller) function that prints raw register values
+    transceiver.printPrettyDetails(); // (larger) function that prints human readable data
 }
 
 // Master type
