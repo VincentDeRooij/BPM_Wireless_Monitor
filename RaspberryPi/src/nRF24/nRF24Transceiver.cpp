@@ -19,6 +19,9 @@ bool setupTransceiver()
         return 0; // quit now
     }
 
+    // Fix to make sure it works (happens with alot of modules)
+    transceiver.setAutoAck(false);
+
     std::cout << "MODULE ONLINE!" << std::endl;
 
     // setup the payload size
@@ -31,7 +34,7 @@ bool setupTransceiver()
     transceiver.openWritingPipe(pipes[0]); // always uses pipe 0, using the transmitter ID address
 
     // setup the RX address of the TX node into a RX pipe
-    transceiver.openReadingPipe(1,pipes[1]); // using pipe 1, using the receiver ID address
+    transceiver.openReadingPipe(1, pipes[1]); // using pipe 1, using the receiver ID address
 }
 
 // Master type
@@ -46,7 +49,7 @@ void setToTransmitterType(int payload)
     {
         // clock_gettime(CLOCK_MONOTONIC_RAW, &startTimer);          // start the timer
         bool report = transceiver.write(&data, sizeof(int)); // transmit & save the report
-        uint32_t timerEllapsed = timer.getElapsedMicros();               // end the timer
+        uint32_t timerEllapsed = timer.getElapsedMicros();   // end the timer
 
         if (report)
         {
