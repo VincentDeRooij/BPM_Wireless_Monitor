@@ -25,10 +25,10 @@ int main(int argc, char const *argv[])
 
     if (nRF24IsActive)
     {
-	std::cout << "NRF24 MODULE SETTING UP" << std::endl;
+        std::cout << "NRF24 MODULE SETTING UP" << std::endl;
 
         setupTransceiver();
-        int data = 100;
+        float data = 100.0;
         setToTransmitterType(data);
         //setRoleOfTransceiver(TRANCSEIVER_ROLE_TYPE::TRANSMITTER);
     }

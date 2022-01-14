@@ -6,7 +6,7 @@
 MicroTimer timer;
 RF24 transceiver(CE_PIN, 0);
 
-const uint8_t linkAddress[10] = {"RPI<->ESP"};
+const uint64_t linkerPipe = 0xF0F0F0F0D2LL;
 
 bool setupTransceiver()
 {
@@ -31,7 +31,7 @@ bool setupTransceiver()
     transceiver.setPALevel(PA_LEVEL);
 
     // setup the TX address of the RX node into the TX pipe
-    transceiver.openWritingPipe(linkAddress); // always uses pipe 0, using the transmitter ID address
+    transceiver.openWritingPipe(linkerPipe); // always uses pipe 0, using the transmitter ID address
 
     // setup the RX address of the TX node into a RX pipe
     //transceiver.openReadingPipe(1, pipes[1]); // using pipe 1, using the receiver ID address
@@ -41,11 +41,11 @@ bool setupTransceiver()
 }
 
 // Master type
-void setToTransmitterType(int payload)
+void setToTransmitterType(float payload)
 {
     transceiver.stopListening(); // put radio in TX mode
 
-    int data = 100;
+    float data = 100.0;
 
     unsigned int failure = 0; // keep track of failures
     while (failure < 6)

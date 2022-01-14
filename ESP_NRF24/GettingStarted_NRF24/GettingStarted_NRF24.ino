@@ -18,7 +18,7 @@
 RF24 radio(1, 3); // using pin 7 for the CE pin, and pin 8 for the CSN pin
 
 // Let these addresses be used for the pair
-const uint8_t linkAddress[10] = {"RPI<->ESP"};
+const uint64_t linkerPipe = 0xF0F0F0F0D2LL;
 // an identifying device destination
 
 // to use different addresses on a pair of radios, we need a variable to
@@ -77,7 +77,7 @@ void setup() {
   //radio.openWritingPipe(pipes[1]);     // always uses pipe 0
 
   // set the RX address of the TX node into a RX pipe
-  radio.openReadingPipe(1,linkAddress); // using pipe 1, using the receiver ID address
+  radio.openReadingPipe(1,linkerPipe); // using pipe 1, using the receiver ID address
 
   radio.startListening(); // put radio in RX mode
 
