@@ -18,7 +18,7 @@
 RF24 radio(1, 3); // using pin 7 for the CE pin, and pin 8 for the CSN pin
 
 // Let these addresses be used for the pair
-const uint64_t pipes[2] = {0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL};// It is very helpful to think of an address as a path instead of as
+const uint8_t linkAddress[10] = {"RPI<->ESP"};
 // an identifying device destination
 
 // to use different addresses on a pair of radios, we need a variable to
@@ -31,7 +31,7 @@ bool role = false;  // true = TX role, false = RX role
 // For this example, we'll be using a payload containing
 // a single float number that will be incremented
 // on every successful transmission
-int payload = 0;
+float payload = 0.0;
 
 void setup() {
 
@@ -74,10 +74,10 @@ void setup() {
   radio.setPayloadSize(sizeof(payload)); // float datatype occupies 4 bytes
 
   // set the TX address of the RX node into the TX pipe
-  radio.openWritingPipe(pipes[0]);     // always uses pipe 0
+  //radio.openWritingPipe(pipes[1]);     // always uses pipe 0
 
   // set the RX address of the TX node into a RX pipe
-  radio.openReadingPipe(1,pipes[1]); // using pipe 1, using the receiver ID address
+  radio.openReadingPipe(1,linkAddress); // using pipe 1, using the receiver ID address
 
   radio.startListening(); // put radio in RX mode
 
